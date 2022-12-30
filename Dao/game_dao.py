@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
-from Model.exceptions import NoAmmunitionError
+
 from Model.battlefield import Battlefield
 from Model.game import Game
 from Model.player import Player
@@ -19,18 +19,18 @@ Session = sessionmaker(bind=engine)
 
 
 class GameEntity(Base):
- __tablename__ = 'game'
- id = Column(Integer, primary_key=True)
- players = relationship("PlayerEntity", back_populates="game",
+    __tablename__ = 'game'
+    id = Column(Integer, primary_key=True)
+    players = relationship("PlayerEntity", back_populates="game",
                                         cascade="all, delete-orphan")
 
- class PlayerEntity(Base):
-     __tablename__ = 'player'
-     id = Column(Integer, primary_key=True)
-     name = Column(String, nullable=False)
-     game_id = Column(Integer, ForeignKey("game.id"), nullable=False)
-     game = relationship("GameEntity", back_populates="player")
-     battle_field = relationship("BattlefieldEntity",
+class PlayerEntity(Base):
+    __tablename__ = 'player'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    game_id = Column(Integer, ForeignKey("game.id"), nullable=False)
+    game = relationship("GameEntity", back_populates="player")
+    battle_field = relationship("BattlefieldEntity",
                                  back_populates="player",
                                  uselist=False, cascade="all, delete-orphan")
 
